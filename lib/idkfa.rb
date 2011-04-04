@@ -1,3 +1,1 @@
-module Idkfa
-  require 'idkfa/railtie'
-end
+require 'idkfa/base'

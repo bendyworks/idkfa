@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Idkfa
   class Railtie < Rails::Railtie
     initializer "idkfa.load_credentials" do
@@ -9,14 +11,22 @@ module Idkfa
         if credentials_tmp.exist?
           FileUtils.cp credentials_tmp, credentials
         else
-          credentials_tmp.mkpath
-          credentials.mkpath
+          template =
+<<TMP
+development:
+test:
+staging:
+production:
+TMP
+          credentials_tmp.open('w') {|cr| cr.write template }
+          credentials.open('w') {|cr| cr.write template }
         end
       end
 
       # Load credentials based on environment
       config = YAML.load_file(credentials)
-      config.fetch(Rails.env, {}).each do |key, value|
+      config_vars = config.fetch(Rails.env, {}) || {}
+      config_vars.each do |key, value|
         ENV[key.upcase] = value.to_s
       end
     end

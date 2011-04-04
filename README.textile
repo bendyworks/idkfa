@@ -1,0 +1,18 @@
+h1. idkfa
+
+Storing keys in your repository is A Bad Idea&trade;. With @idkfa@, you can store them in a YAML file outside your repository yet include them easily.
+
+Once installed and setup with @Idkfa.load_keys@, your sensitive information will be stored in upper-cased keys inside @ENV@.
+
+h2. Usage with Rails
+
+* Add @gem 'idkfa'@ to your @Gemfile@
+* Run @bundle@
+* Inside config/application.rb, after @Bundler.require@, add @Idkfa.load_keys Rails.env, :credentials => Rails.root.join('config', 'credentials.yml')@
+* In your application, use @ENV['MY_SECRET_API_KEY']@
+
+h2. General Usage
+
+* Run @gem install idkfa@
+* Use @Idkfa.load_keys :production, :credentials => File.expand_path('../credentials.yml', __FILE__)@ (or similar)
+* In your code, use @ENV['MY_SECRET_API_KEY']@

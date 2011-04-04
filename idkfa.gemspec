@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
   s.name        = "idkfa"
   s.version     = Idkfa::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.authors     = ["Bendyworks"]
+  s.email       = ["dev@bendyworks.com"]
+  s.homepage    = "http://github.com/bendyworks/idkfa"
+  s.summary     = %q{Generate and/or load config/credentials.yml}
+  s.description = %q{Use this gem to store your site credentials in a secure way}
 
   s.rubyforge_project = "idkfa"
 

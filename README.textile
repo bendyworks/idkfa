@@ -4,6 +4,8 @@ Storing keys in your repository is A Bad Idea&trade;. With @idkfa@, you can stor
 
 Once installed and setup with @Idkfa.load_keys@, your sensitive information will be stored in upper-cased keys inside @ENV@.
 
+Why "idkfa?" Haven't you played Doom?
+
 h2. Usage with Rails
 
 * Add @gem 'idkfa'@ to your @Gemfile@
@@ -16,3 +18,10 @@ h2. General Usage
 * Run @gem install idkfa@
 * Use @Idkfa.load_keys :production, :credentials => File.expand_path('../credentials.yml', __FILE__)@ (or similar)
 * In your code, use @ENV['MY_SECRET_API_KEY']@
+
+h2. Acknowledgements
+
+Written/Conceived by:
+* Bradley Grzesiak - Bendyworks
+* Jaymes Waters - Bendyworks
+* Nick Karpenske - Bendyworks

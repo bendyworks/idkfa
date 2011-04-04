@@ -1,0 +1,4 @@
+staging:
+  key: staging-key
+production:
+  key: prod

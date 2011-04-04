@@ -1,3 +1,3 @@
 module Idkfa
-  # Your code goes here...
+  require 'idkfa/railtie'
 end

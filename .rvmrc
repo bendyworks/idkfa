@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+environment_id="ruby-1.9.2-p136@idkfa"
+
+if [[ -d "${rvm_path:-$HOME/.rvm}/environments" \
+  && -s "${rvm_path:-$HOME/.rvm}/environments/$environment_id" ]] ; then
+  \. "${rvm_path:-$HOME/.rvm}/environments/$environment_id"
+else
+  # If the environment file has not yet been created, use the RVM CLI to select.
+  rvm --create  "$environment_id"
+fi
+
+# Ensure that Bundler is installed, install it if it is not.
+if ! command -v bundle ; then
+   printf "The rubygem 'bundler' is not installed, installing it now.\n"
+   gem install bundler
+fi

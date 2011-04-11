@@ -10,7 +10,13 @@ h2. Usage with Rails
 
 * Add @gem 'idkfa'@ to your @Gemfile@
 * Run @bundle@
-* Inside config/application.rb, after @Bundler.require@, add @Idkfa.load_keys Rails.env, :credentials => Rails.root.join('config', 'credentials.yml')@
+* Add the @Idkfa.load_keys@ call inside your Application definition in @config/application.rb@:
+
+bc. class Application < Rails::Application
+  Idkfa.load_keys Rails.env, :credentials => Rails.root.join('config', 'credentials.yml')
+  ...
+end
+
 * In your application, use @ENV['MY_SECRET_API_KEY']@
 
 h2. General Usage

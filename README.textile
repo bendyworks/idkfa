@@ -6,11 +6,31 @@ Once installed and setup with @Idkfa.load_keys@, your sensitive information will
 
 Why "idkfa?" Haven't you played Doom?
 
+h2. Default Configuration
+
+To configure idkfa, you will need to add a @credentials.yml@ file to your project
+
+Sample @config/credentials.yml@:
+
+bc. common: &COMMON
+  domain_url: http://localhost:3000
+  my_secret_api_key: something_really_secret
+development:
+  <<: *COMMON
+production:
+  <<: *COMMON
+
 h2. Usage with Rails
 
 * Add @gem 'idkfa'@ to your @Gemfile@
 * Run @bundle@
-* Inside config/application.rb, after @Bundler.require@, add @Idkfa.load_keys Rails.env, :credentials => Rails.root.join('config', 'credentials.yml')@
+* Add the @Idkfa.load_keys@ call inside your Application definition in @config/application.rb@:
+
+bc. class Application < Rails::Application
+  Idkfa.load_keys Rails.env, :credentials => Rails.root.join('config', 'credentials.yml')
+  ...
+end
+
 * In your application, use @ENV['MY_SECRET_API_KEY']@
 
 h2. General Usage

@@ -6,6 +6,19 @@ Once installed and setup with @Idkfa.load_keys@, your sensitive information will
 
 Why "idkfa?" Haven't you played Doom?
 
+h2. Default Configuration
+
+To configure idkfa, you will need to add a @credentials.yml@ file to your project
+
+Sample @config/credentials.yml@:
+
+bc. common: &COMMON
+  domain_url: http://localhost:3000
+development:
+  <<: *COMMON
+production:
+  <<: *COMMON
+
 h2. Usage with Rails
 
 * Add @gem 'idkfa'@ to your @Gemfile@

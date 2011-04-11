@@ -14,6 +14,7 @@ Sample @config/credentials.yml@:
 
 bc. common: &COMMON
   domain_url: http://localhost:3000
+  my_secret_api_key: something_really_secret
 development:
   <<: *COMMON
 production:

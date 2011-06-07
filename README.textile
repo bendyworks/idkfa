@@ -1,4 +1,4 @@
-!https://github.com/bendyworks/idkfa/blob/master/doc/stop.png!
+!https://raw.github.com/bendyworks/idkfa/master/doc/stop.png!
 
 h1. STOP!
 

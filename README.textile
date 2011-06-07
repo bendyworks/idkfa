@@ -1,6 +1,8 @@
-p={font-size: 400%}. STOP!
+h1. STOP!
 
-p={font-size: 250%}. This README is not yet accurate! That is, do not assume any of this documentation is true until this notice is removed!
+p. No, seriously. STOP!
+
+p. This README is not yet accurate! That is, do not assume any of this documentation is true until this notice is removed!
 
 h1. idkfa: Share Sensitive Information Securely
 

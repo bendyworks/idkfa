@@ -17,5 +17,12 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
+  s.add_dependency('slop')
+
+  s.add_development_dependency('ruby-debug19')
   s.add_development_dependency('rspec')
+  s.add_development_dependency('ZenTest')
+  s.add_development_dependency('RedCloth')
+  s.add_development_dependency('guard')
+  s.add_development_dependency('rb-fsevent')
 end

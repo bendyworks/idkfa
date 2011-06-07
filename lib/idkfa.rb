@@ -1,1 +1,8 @@
-require 'idkfa/base'
+require 'yaml'
+
+module Idkfa
+
+  class << self
+  end
+
+end

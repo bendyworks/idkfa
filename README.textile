@@ -1,43 +1,172 @@
-h1. idkfa
+p={font-size: 400%}. STOP!
 
-Storing keys in your repository is A Bad Idea&trade;. With @idkfa@, you can store them in a YAML file outside your repository yet include them easily.
+p={font-size: 250%}. This README is not yet accurate! That is, do not assume any of this documentation is true until this notice is removed!
 
-Once installed and setup with @Idkfa.load_keys@, your sensitive information will be stored in upper-cased keys inside @ENV@.
+h1. idkfa: Share Sensitive Information Securely
 
-Why "idkfa?" Haven't you played Doom?
+Storing sensitive information (API keys, passwords, etc) in your repository is generally considered A Bad Idea&trade;. That leaves us with the problem of sharing this information out-of-band, which is an error-prone, arduous process. With @idkfa@, you can seamlessly store and use your credentials from within the repository using the magic of *encryption*.
 
-h2. Default Configuration
+There are two interfaces to @idkfa@: from the command line and as a library. From the command line, you manage the permissions and keys. Using @idkfa@ as a ruby library, you can get access to the keys inside your application.
 
-To configure idkfa, you will need to add a @credentials.yml@ file to your project
+The name @idkfa@ comes from the cheat code for Doom which, among other things, gives you all keys.
 
-Sample @config/credentials.yml@:
+h2. Technology
 
-bc. common: &COMMON
-  domain_url: http://localhost:3000
-  my_secret_api_key: something_really_secret
+@idkfa@ uses both public key (RSA, asymmetric) and block (AES, symmetric) encryption to provide a secure, scalable way of storing sensitive information.
+
+h2. A WARNING
+
+This tool does not prevent tampering with your sensitive information. For example, if someone gets access to your repository and messes around with the credentials file, you could accidentally give them access at a later date.
+
+This "hole" may be fixed in the future.
+
+h1. Getting Started
+
+Install @idkfa@ as a gem:
+
+bc. gem install idkfa
+
+or declare it in your Gemfile:
+
+bc. gem 'idkfa'
+
+Then initialize @idkfa@ with:
+
+bc. $ idkfa init
+
+This will generate a public/private keypair in @~/.idkfa/@ (if it doesn't already exist). It will also create a @credentials.yml@ file in @./config/@ (if @./config/@ exists) or in the current directory. If you'd like to specify the location, use the @-c@ flag:
+
+bc. $ idkfa init -c keys/credentials.yml
+
+Sample @credentials.yml@:
+
+bc. ---
+keys:
+  - id: '<your-login@your-computer>'
+    public_key: '<your idkfa-specific rsa public key>'
+    symmetric_key: '<the aes key, encrypted with rsa public key>'
+
+Here's an example of what a @credentials.yml@ might look like with a couple developers and servers:
+
+bc. ---
+keys:
+  - id: 'alice@alice.example.com'
+    rsa: '<idkfa-specific rsa public key for alice>'
+    symmetric_key: '<the aes key, encrypted with rsa public key for alice>'
+  - id: 'bob@bob.example.com'
+    rsa: '<idkfa-specific rsa public key for bob>'
+    symmetric_key: '<the aes key, encrypted with rsa public key for bob>'
+  - id: staging server
+    rsa: '<rsa public key for staging server>'
+    symmetric_key: '<the aes key, encrypted with rsa public key for staging server>'
+  - id: production server
+    rsa: '<rsa public key for production server>'
+    symmetric_key: '<the aes key, encrypted with rsa public key for production server>'
+content: '<aes-encrypted YAML>'
+
+When the value of the @content@ key is decrypted, it is a simple file. The suggested (and generated) file structure is YAML in the following form:
+
+bc. ---
 development:
-  <<: *COMMON
+  # twitter_consumer_key: 'insert consumer key here'
+test:
+  # twitter_consumer_key: 'insert consumer key here'
+staging:
+  # twitter_consumer_key: 'insert consumer key here'
 production:
-  <<: *COMMON
+  # twitter_consumer_key: 'insert consumer key here'
+
+Changing this information is covered in "Managing Your Sensitive Data":#manage-sensitive-information
+
+h1. Managing Access
+
+h2(#managing-user-access). User Access
+
+h3. Creating Your Public/Private Keypair
+
+Running @idkfa init@ from the command line will automatically generate a public/private keypair for the current user. It will, however, also generate @credentials.yml@ in the same directory. If you do not need to generate a credentials file, you can instead run:
+
+bc. $ idkfa init --no-config
+
+This will simply generate a public/private keypair if one does not already exist.
+
+h3. Granting Access to Others
+
+Let's say you're the initial user of @idkfa@ on a project. That is, you were the one who ran @idkfa init@ to generate the credentials file. That would mean you're the only one authorized to decrypt the sensitive information. A valid use case to be sure, but not great if you intend to collaborate.
+
+h4. If You've Never Granted Access to the Other Developer
+
+Granting access to others is quite simple. Have the other developer run @idkfa init --no-config@ from the command line. This will generate two files: @~/.idkfa/public.yml@ and @~/.idkfa/.private.yml@. Transfer the public keyfile on a secure channel, like @scp@ or sneaker-net. On the authorized computer, run:
+
+bc. $ idkfa import other_users_public_key.yml
+
+This will authorize the other developer and remember the public key for future authorizations in @~/.idkfa/others.yml@.
+
+h5. On the Same Network?
+
+If you're on the same network as the other user, you can run:
+
+bc. $ idkfa serve
+
+This will open a server on port 48484 (or you can pass @-p PORT@). The other developer can then run:
+
+bc. $ idkfa request <hostname[:port]>
+
+The user running the server will be prompted to verify a fingerprint (generally done out of band, like vocally). Once verified, the requestor's credentials file will be updated to be authorized. Upon completion, the server will terminate (this can be prevented with @--keep-open@).
+
+h4. If You've Previously Granted Access to the Other Developer
+
+Simply run the following:
+
+bc. $ idkfa authorize user@host
+
+If you don't remember the other developer's username and host, you can use the following:
+
+bc. $ idkfa authorize --list
+
+h2. Computer (eg: Server) Access
+
+Granting a server access to the encrypted sensitive information is no different than granting a "user access.":#managing-user-access You simply use the user who is used to run the application. @idkfa@, however, provides convenience plugins to grant server access in certain circumstances.
+
+h3. Heroku
+
+Run the following:
+
+bc. $ heroku config:add IDKFA_PUBLIC_KEY=$(idkfa show public) IDKFA_PRIVATE_KEY=$(idkfa show private)
+
+h3. Capistrano
+
+Until the @capistrano-idkfa@ gem is written, simply log onto the server as the application's user and follow the "standard user access instructions":#managing-user-access.
+
+Please see the "capistrano-idkfa":https://github.com/bendyworks/capistrano-idkfa gem to use @idkfa@ seamlessly with "capistrano":http://capify.org.
+
+h3. Engine Yard
+
+Until the @ey-idkfa@ gem is written, simply log onto the server as the application's user and follow the "standard user access instructions":#managing-user-access.
+
+Please see the "ey-idkfa":https://github.com/bendyworks/ey-idkfa gem to use @idkfa@ seamlessly with "Engine Yard Cloud":http://www.engineyard.com.
+
+h2. Revoking Access
+
+Revoking access is simple, but you must remember that the revoked user probably still has the ability to read old versions of your credentials file. In other words, once you've revoked the user, you'll want to manually "reset all of your sensitive information":#manage-sensitive-information (assuming you can reset your API keys!).
+
+To revoke a user:
+
+bc. $ idkfa revoke user@host
+
+This removes the revokee's information from the credentials file and resets the symmetric key for everyone else. Do not be surprised when your source code management tool reports that your credentials file will be almost entirely rewritten.
+
+h1(#manage-sensitive-information). Managing Your Sensitive Information
+
+Since your sensitive information is encrypted, you cannot directly manage that data. @idkfa@ provides the ability to dump your sensitive data to a file (credentials.unencrypted.yml) in the same directory as your credentials file:
+
+bc. $ idkfa dump
 
 h2. Usage with Rails
 
 * Add @gem 'idkfa'@ to your @Gemfile@
 * Run @bundle@
-* Add the @Idkfa.load_keys@ call inside your Application definition in @config/application.rb@:
-
-bc. class Application < Rails::Application
-  Idkfa.load_keys Rails.env, :credentials => Rails.root.join('config', 'credentials.yml')
-  ...
-end
-
-* In your application, use @ENV['MY_SECRET_API_KEY']@
-
-h2. General Usage
-
-* Run @gem install idkfa@
-* Use @Idkfa.load_keys :production, :credentials => File.expand_path('../credentials.yml', __FILE__)@ (or similar)
-* In your code, use @ENV['MY_SECRET_API_KEY']@
+* In your application, use @Idkfa['twitter_consumer_key']@ (Idkfa will autoload your credentials on first use)
 
 h2. Acknowledgements
 

@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'idkfa'
+require 'idkfa/cli'
+
+Idkfa::CLI.run

@@ -4,12 +4,14 @@ module Idkfa
   class CLI
     class << self
 
-      def run
-        opts = Slop.parse ARGV.dup do |o|
+      def parse_opts
+        Slop.parse ARGV.dup do |o|
+
+          o.on :v, :verbose, :default => true
 
           o.on :h, :help, do
             puts generic_banner
-            exit
+            exit 0
           end
 
           available_commands.each_pair do |cmd, blk|
@@ -19,10 +21,22 @@ module Idkfa
             end
           end
 
+          o.on :c, :config, :optional => true
+
         end
+      end
+
+      def run
+        opts = parse_opts
+
+        puts opts[:config]
+        exit 0
 
         if cmd = argv_starts_with_valid_command
           send(cmd, opts[cmd])
+        elsif opts['no-config']
+          puts 'yay!'
+          exit 0
         else
           puts generic_banner
           exit 1

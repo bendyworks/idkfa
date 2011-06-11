@@ -20,9 +20,9 @@ h2. Technology
 
 h2. A WARNING
 
-This tool does not prevent tampering with your sensitive information. For example, if someone gets access to your repository and messes around with the credentials file, you could accidentally give them access at a later date.
+This tool does not prevent tampering with your sensitive information. For example, if someone gets write-access to your repository and messes around with the credentials file, you could accidentally give them access at a later date.
 
-This "hole" may be fixed in the future.
+This "hole" may be fixed in the future. Please comment on the "appropriate issue":https://github.com/bendyworks/idkfa/issues/1 if you have ideas.
 
 h1. Getting Started
 
@@ -66,9 +66,9 @@ keys:
   - id: production server
     rsa: '<rsa public key for production server>'
     symmetric_key: '<the aes key, encrypted with rsa public key for production server>'
-content: '<aes-encrypted YAML>'
+content: '<aes-encrypted, base64-encoded YAML>'
 
-When the value of the @content@ key is decrypted, it is a simple file. The suggested (and generated) file structure is YAML in the following form:
+When the value of the @content@ key is decrypted, it is a simple YAML file. The generated file structure is in the following form:
 
 bc. ---
 development:
@@ -90,7 +90,7 @@ h3. Creating Your Public/Private Keypair
 
 Running @idkfa init@ from the command line will automatically generate a public/private keypair for the current user. It will, however, also generate @credentials.yml@ in the same directory. If you do not need to generate a credentials file, you can instead run:
 
-bc. $ idkfa init --no-config
+bc. $ idkfa keygen
 
 This will simply generate a public/private keypair if one does not already exist.
 
@@ -100,7 +100,7 @@ Let's say you're the initial user of @idkfa@ on a project. That is, you were the
 
 h4. If You've Never Granted Access to the Other Developer
 
-Granting access to others is quite simple. Have the other developer run @idkfa init --no-config@ from the command line. This will generate two files: @~/.idkfa/public.yml@ and @~/.idkfa/.private.yml@. Transfer the public keyfile on a secure channel, like @scp@ or sneaker-net. On the authorized computer, run:
+Granting access to others is quite simple. Have the other developer run @idkfa keygen@ from the command line. This will generate two files: @~/.idkfa/default.public.yml@ and @~/.idkfa/.default.private.yml@. Transfer the *public* keyfile on a secure channel, like @scp@ or sneaker-net. On the authorized computer, run:
 
 bc. $ idkfa import other_users_public_key.yml
 
@@ -120,7 +120,7 @@ The user running the server will be prompted to verify a fingerprint (generally 
 
 h4. If You've Previously Granted Access to the Other Developer
 
-Simply run the following:
+If the user's key already exists in @~/.idkfa/others.yml@, simply run the following:
 
 bc. $ idkfa authorize user@host
 
@@ -128,27 +128,38 @@ If you don't remember the other developer's username and host, you can use the f
 
 bc. $ idkfa authorize --list
 
+If you just want to authorize everyone in your @~/.idkfa/others.yml@ file, use:
+
+bc. $ idkfa authorize --all
+
 h2. Computer (eg: Server) Access
 
 Granting a server access to the encrypted sensitive information is no different than granting a "user access.":#managing-user-access You simply use the user who is used to run the application. @idkfa@, however, provides convenience plugins to grant server access in certain circumstances.
 
 h3. Heroku
 
-Run the following:
+Until the @heroku-idkfa@ gem is written, run the following to generate a new keypair:
 
-bc. $ heroku config:add IDKFA_PUBLIC_KEY=$(idkfa show public) IDKFA_PRIVATE_KEY=$(idkfa show private)
+bc. $ idkfa keygen heroku
+
+Then, run the following to put the keypair up on heroku:
+
+bc. $ heroku config:add IDKFA_KEYS="$(idkfa base64 heroku)"
+
+<s>Please see the "heroku-idkfa":https://github.com/bendyworks/heroku-idkfa gem to use @idkfa@ seamlessly with "heroku":http://heroku.com. </s>
+
 
 h3. Capistrano
 
 Until the @capistrano-idkfa@ gem is written, simply log onto the server as the application's user and follow the "standard user access instructions":#managing-user-access.
 
-Please see the "capistrano-idkfa":https://github.com/bendyworks/capistrano-idkfa gem to use @idkfa@ seamlessly with "capistrano":http://capify.org.
+<s>Please see the "capistrano-idkfa":https://github.com/bendyworks/capistrano-idkfa gem to use @idkfa@ seamlessly with "capistrano":http://capify.org. </s>
 
 h3. Engine Yard
 
 Until the @ey-idkfa@ gem is written, simply log onto the server as the application's user and follow the "standard user access instructions":#managing-user-access.
 
-Please see the "ey-idkfa":https://github.com/bendyworks/ey-idkfa gem to use @idkfa@ seamlessly with "Engine Yard Cloud":http://www.engineyard.com.
+<s>Please see the "ey-idkfa":https://github.com/bendyworks/ey-idkfa gem to use @idkfa@ seamlessly with "Engine Yard Cloud":http://www.engineyard.com. </s>
 
 h2. Revoking Access
 
@@ -166,15 +177,27 @@ Since your sensitive information is encrypted, you cannot directly manage that d
 
 bc. $ idkfa dump
 
-h2. Usage with Rails
+When you're done, be sure to load the unencrypted file back into encrypted form:
 
-* Add @gem 'idkfa'@ to your @Gemfile@
-* Run @bundle@
-* In your application, use @Idkfa['twitter_consumer_key']@ (Idkfa will autoload your credentials on first use)
+bc. $ idkfa load
 
-h2. Acknowledgements
+<s>If you'd rather not dump the sensitive information to disk, you can edit it in-place with:
 
-Written/Conceived by:
-* Bradley Grzesiak - Bendyworks
-* Jaymes Waters - Bendyworks
-* Nick Karpenske - Bendyworks
+bc. $ idkfa edit
+
+</s>
+
+h1. Usage in Code
+
+* Install as a gem (see "Getting Started")
+* In some initialization portion of your code, you may optionally specify a default namespace: @Idkfa.default_namespace = 'production'@ (in the presence of Rails, this will be done automatically)
+* In your code, use @Idkfa['twitter_consumer_key']@ (Idkfa will autoload your credentials on first use)
+
+h1. Acknowledgements
+
+Written by:
+* "Bradley Grzesiak":https://github.com/listrophy - "Bendyworks":http://bendyworks.com
+
+Conceived with the help of:
+* "Jaymes Waters":https://github.com/Jaym3s - "Bendyworks":http://bendyworks.com
+* "Nick Karpenske":https://github.com/randland - "Bendyworks":http://bendyworks.com

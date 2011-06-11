@@ -1,85 +1,58 @@
-require 'slop'
+require 'yaml'
 
 module Idkfa
   class CLI
     class << self
 
-      def parse_opts
-        Slop.parse ARGV.dup do |o|
-
-          o.on :v, :verbose, :default => true
-
-          o.on :h, :help, do
-            puts generic_banner
-            exit 0
-          end
-
-          available_commands.each_pair do |cmd, blk|
-            o.command cmd, :help => true do |c|
-              c.banner "Usage: idkfa #{cmd} [opts]"
-              blk[c]
-            end
-          end
-
-          o.on :c, :config, :optional => true
-
-        end
-      end
-
       def run
-        opts = parse_opts
+        run_with_opts ARGV.dup
+      end
 
-        puts opts[:config]
-        exit 0
-
-        if cmd = argv_starts_with_valid_command
-          send(cmd, opts[cmd])
-        elsif opts['no-config']
-          puts 'yay!'
-          exit 0
+      def run_with_opts opts
+        case opts[0]
+        when 'init'
+          run_init opts[1..-1]
         else
-          puts generic_banner
-          exit 1
+          puts 'invalid command'
         end
       end
 
-      def argv_starts_with_valid_command
-        ARGV.any? && available_commands.keys.detect {|x| x.to_s == ARGV[0]}
+      def run_init opts
+        conditionally_create_keypair opts
+        conditionally_create_credentials_file
       end
 
-      def available_commands
-        {
-          :generate => lambda {|c|
-            c.on :v
-          },
-          :encrypt => lambda {|c|},
-          :decrypt => lambda {|c|}
-        }
+      def conditionally_create_keypair opts
+        # ENSURE keypair doesn't already exist
+        keypair_dir = conditionally_create_keypair_directory
+        keypair_name = opts[0] || 'default'
+        keys = Idkfa::OpenSSL.generate_keypair
+        pub_key = keys[:public_key]
+        priv_key = keys[:private_key]
+
+        File.open("#{keypair_dir}/#{keypair_name}.public.yml", 'w') do |f|
+          YAML.dump(pub_key, f)
+        end
+
+        File.open("#{keypair_dir}/.#{keypair_name}.private.yml", 'w') do |f|
+          YAML.dump(priv_key, f)
+        end
+
       end
 
-      def decrypt opts
-        puts 'decrypting'
+      def conditionally_create_keypair_directory
+        FileUtils.mkdir_p("#{Idkfa.home_directory}/.idkfa").first
       end
 
-      def encrypt opts
-        puts 'encrypting'
-      end
-
-      def generate opts
-        puts 'generating'
-        puts "v? #{opts.v?}"
-      end
-
-      def generic_banner
-        <<-HELP_STR
-Usage: idkfa COMMAND [opts]
-
-Where COMMAND is one of:
-#{available_commands.keys.map{|str| "\t#{str}"}.join("\n")}
-
-See the help for each command by passing the -h option. eg:
-\tidkfa generate -h
-HELP_STR
+      def conditionally_create_credentials_file
+        # ENSURE credentials file doesn't already exist
+        filename = "#{Idkfa.project_directory}/credentials.yml"
+        unless File.exists?(filename)
+          hash = {'keys' => [{'id' => 'login@computer', 'public_key' => 'pub_key', 'symmetric_key' => 'sym_key'}]}
+          File.open(filename, 'w') do |f|
+            YAML.dump(hash, f)
+          end
+        end
       end
 
     end

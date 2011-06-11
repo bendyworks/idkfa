@@ -55,16 +55,16 @@ Here's an example of what a @credentials.yml@ might look like with a couple deve
 bc. ---
 keys:
   - id: 'alice@alice.example.com'
-    rsa: '<idkfa-specific rsa public key for alice>'
+    public_key: '<idkfa-specific rsa public key for alice>'
     symmetric_key: '<the aes key, encrypted with rsa public key for alice>'
   - id: 'bob@bob.example.com'
-    rsa: '<idkfa-specific rsa public key for bob>'
+    public_key: '<idkfa-specific rsa public key for bob>'
     symmetric_key: '<the aes key, encrypted with rsa public key for bob>'
   - id: staging server
-    rsa: '<rsa public key for staging server>'
+    public_key: '<rsa public key for staging server>'
     symmetric_key: '<the aes key, encrypted with rsa public key for staging server>'
   - id: production server
-    rsa: '<rsa public key for production server>'
+    public_key: '<rsa public key for production server>'
     symmetric_key: '<the aes key, encrypted with rsa public key for production server>'
 content: '<aes-encrypted, base64-encoded YAML>'
 
@@ -197,6 +197,7 @@ h1. Acknowledgements
 
 Written by:
 * "Bradley Grzesiak":https://github.com/listrophy - "Bendyworks":http://bendyworks.com
+* "Zachery Moneypenny":https://github.com/whazzmaster
 
 Conceived with the help of:
 * "Jaymes Waters":https://github.com/Jaym3s - "Bendyworks":http://bendyworks.com

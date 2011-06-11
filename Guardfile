@@ -15,7 +15,11 @@ end
 
 guard 'cucumber' do
   watch(%r{^features/.+\.feature$})
-  watch(%r{^lib/(.+)\.rb})
+  watch(%r{^lib/(.+)\.rb})                              { 'features' }
   watch(%r{^features/support/.+$})                      { 'features' }
-  watch(%r{^features/step_definitions/(.+)_steps\.rb$}) { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'features' }
+  watch(%r{^features/step_definitions/(.+)_steps\.rb$}) do |m|
+    Dir[File.join("**/#{m[1]}.feature")][0] ||
+    Dir[File.join("**/#{m[1]}/*.feature")] ||
+    'features'
+  end
 end

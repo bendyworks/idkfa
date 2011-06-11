@@ -13,4 +13,17 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
   config.mock_with :rspec
+
+  config.before do
+    path = '/tmp/idkfa'
+    FileUtils.rm_rf "#{path}/.idkfa"
+    Idkfa.stub(:home_directory => path)
+
+    FileUtils.rm_rf path
+    FileUtils.mkdir_p path
+    Idkfa.stub(:project_directory => "#{path}/project")
+
+    FileUtils.mkdir_p "#{Idkfa.project_directory}/config"
+  end
+
 end

@@ -12,3 +12,13 @@ end
 Given /^the project directory contains "([^"]*)"$/ do |path|
   FileUtils.mkdir_p "#{Idkfa.project_directory}/#{path}"
 end
+
+Given /^an \.idkfa directory exists at "([^"]*)" with "([^"]*)" keyfiles$/ do |path, keypair_name|
+  FileUtils.mkdir_p path
+  FileUtils.touch "#{path}/#{keypair_name}.public.yml"
+  FileUtils.touch "#{path}/.#{keypair_name}.private.yml"
+end
+
+
+
+

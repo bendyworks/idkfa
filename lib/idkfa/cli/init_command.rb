@@ -11,21 +11,12 @@ module Idkfa
       end
 
       def run
-        create_keypair unless keypair_exists?
+        Idkfa::OpenSSL.create_keypair unless Idkfa::OpenSSL.keypair_exists?
         create_credentials_file unless credentials_file_exists?
-      end
-
-      def keypair_exists?
-        false
       end
 
       def credentials_file_exists?
         false
-      end
-
-      def create_keypair
-        keys = Idkfa::OpenSSL.generate_keypair
-        Idkfa::OpenSSL.write_keypair 'default', keys
       end
 
       def create_credentials_file

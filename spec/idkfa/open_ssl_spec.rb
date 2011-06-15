@@ -47,6 +47,20 @@ describe Idkfa::OpenSSL do
       end
     end
   end
+  
+  describe '#create_keypair' do
+    after { Idkfa::OpenSSL.create_keypair }
+
+    it 'generates the keypair' do
+      Idkfa::OpenSSL.should_receive(:generate_keypair)
+      Idkfa::OpenSSL.stub(:write_keypair)
+    end
+
+    it 'writes the keypair to disk' do
+      Idkfa::OpenSSL.should_receive(:write_keypair)
+      Idkfa::OpenSSL.stub(:generate_keypair)
+    end
+  end
 
   describe '#keypair_exists?' do
     it "constructs the expected public/private key filenames when no name is passed" do

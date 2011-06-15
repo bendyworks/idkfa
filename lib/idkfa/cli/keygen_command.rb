@@ -11,6 +11,7 @@ module Idkfa
       def run
         if Idkfa::OpenSSL.keypair_exists? @keypair_name
           puts "A key pair for '#{@keypair_name}' already exists"
+          exit(1)
         else
           Idkfa::OpenSSL.create_keypair @keypair_name
         end

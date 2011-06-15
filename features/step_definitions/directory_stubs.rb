@@ -18,7 +18,3 @@ Given /^an \.idkfa directory exists at "([^"]*)" with "([^"]*)" keyfiles$/ do |p
   FileUtils.touch "#{path}/#{keypair_name}.public.yml"
   FileUtils.touch "#{path}/.#{keypair_name}.private.yml"
 end
-
-
-
-

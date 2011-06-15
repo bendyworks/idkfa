@@ -1,8 +1,18 @@
 require 'openssl'
+require 'fileutils'
 
 module Idkfa
   class OpenSSL
     class << self
+      def create_keypair keypair_name = 'default'
+        keys = generate_keypair
+        write_keypair keypair_name, keys
+      end
+      
+      def create_keypair_unless_exists
+        create_keypair unless keypair_exists?
+      end
+
       def generate_keypair
         rsa = ::OpenSSL::PKey::RSA.generate(4096)
         {:public_key => rsa.public_key.to_s, :private_key => rsa.to_s}
@@ -29,6 +39,15 @@ module Idkfa
         FileUtils.mkdir_p("#{Idkfa.home_directory}/.idkfa").first
       end
 
+      def keypair_exists? keypair_name = nil
+        keypair_name = 'default' if keypair_name.nil? || keypair_name == ""
+        directory = "#{Idkfa.home_directory}/.idkfa"
+        public_keyfile = "#{directory}/#{keypair_name}.public.yml"
+        private_keyfile = "#{directory}/.#{keypair_name}.private.yml"
+        pub_key_exists  = File.exists? public_keyfile
+        priv_key_exists = File.exists? private_keyfile
+        pub_key_exists || priv_key_exists
+      end
     end
   end
 end

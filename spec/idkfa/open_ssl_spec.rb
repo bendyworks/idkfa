@@ -47,7 +47,7 @@ describe Idkfa::OpenSSL do
       end
     end
   end
-  
+
   describe '#create_keypair' do
     after { Idkfa::OpenSSL.create_keypair }
 

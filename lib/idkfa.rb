@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'yaml'
 require 'idkfa/open_ssl'
 
 module Idkfa

@@ -14,7 +14,7 @@ describe Idkfa::CLI::InitCommand do
         Idkfa::OpenSSL.should_not_receive(:create_keypair)
       end
     end
- 
+
     context 'when keypair directory does not exist' do
       before { Idkfa::OpenSSL.stub(:keypair_exists?).and_return(false) }
       it 'creates a keypair' do

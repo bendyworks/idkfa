@@ -8,7 +8,7 @@ module Idkfa
         keys = generate_keypair
         write_keypair keypair_name, keys
       end
-      
+
       def create_keypair_unless_exists
         create_keypair unless keypair_exists?
       end

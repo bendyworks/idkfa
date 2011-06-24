@@ -193,6 +193,11 @@ h1. Usage in Code
 * In some initialization portion of your code, you may optionally specify a default namespace: @Idkfa.default_namespace = 'production'@ (in the presence of Rails, this will be done automatically)
 * In your code, use @Idkfa['twitter_consumer_key']@ (Idkfa will autoload your credentials on first use)
 
+h1. Developer Notes
+
+* https://github.com/radar/guides/blob/master/gem-development.md
+* https://github.com/blambeau/quickl (probably not necessary, but we can at least evaluate it)
+
 h1. Acknowledgements
 
 Written by:

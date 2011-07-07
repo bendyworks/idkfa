@@ -10,6 +10,7 @@ module ::Guard
 
     def start
       FileUtils.cp "#{this_dir}/bundle_github.css", '/tmp/bundle_github.css'
+      run_on_change([File.join(this_dir, '..', 'README.textile')])
       true
     end
 

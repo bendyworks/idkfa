@@ -1,19 +1,22 @@
 require 'openssl'
 require 'base64'
 
-key = 'some secret key aflgha4rt9824rjkbefkljaherhwrhwufhoapuwehfa'
-iv = 'the ivpoahergophwerohwehroh'
+secret_message = 'foo!'
 
 aes = OpenSSL::Cipher.new 'AES-256-CBC'
-aes.encrypt
-rnd = aes.random_key
-rndarr = []
-rnd.bytes {|x| rndarr << ("%02x" % x)}
-puts rndarr.join
-aes.iv = iv
-res = aes.update('foo!') + aes.final
 
-puts Base64.strict_encode64(res)
+aes.encrypt
+iv = aes.random_iv  # never EVER use the same IV if you're reusing a key
+rnd = aes.random_key
+
+puts "IV size: #{iv.length * 8}"
+
+puts "Key: #{Base64.strict_encode64 rnd}"
+puts "IV: #{Base64.strict_encode64 iv}"
+
+res = aes.update(secret_message) + aes.final
+
+puts "Encrypted, base64'ed: #{Base64.strict_encode64(res)}"
 
 
 dec = OpenSSL::Cipher.new 'AES-256-CBC'
@@ -22,4 +25,4 @@ dec.key = rnd
 dec.iv = iv
 res2 = dec.update(res) + dec.final
 
-puts res2
+puts "Decrypted: #{res2}"

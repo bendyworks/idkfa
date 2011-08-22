@@ -19,6 +19,7 @@ Feature: The init CLI command
       - id: login@computer
         public_key: pub_key
         symmetric_key: sym_key
+      content: abc123
       """
 
   Scenario: Init with config directory
@@ -38,6 +39,7 @@ Feature: The init CLI command
       - id: login@computer
         public_key: pub_key
         symmetric_key: sym_key
+      content: abc123
       """
 
   Scenario: Init with -c flag
@@ -56,4 +58,5 @@ Feature: The init CLI command
       - id: login@computer
         public_key: pub_key
         symmetric_key: sym_key
+      content: abc123
       """

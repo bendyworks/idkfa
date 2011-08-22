@@ -19,8 +19,7 @@ module Idkfa
       end
 
       def write_keypair keypair_name, keys
-        pub_key = keys[:public_key]
-        priv_key = keys[:private_key]
+        pub_key, priv_key = keys[:public_key], keys[:private_key]
 
         keypair_dir = create_keypair_directory
 

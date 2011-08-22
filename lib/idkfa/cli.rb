@@ -12,7 +12,7 @@ module Idkfa
         when 'keygen'
           KeygenCommand.new(opts[1..-1]).run
         else
-          puts 'invalid command'
+          abort 'invalid command'
         end
       end
     end

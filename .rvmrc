@@ -1,1 +1,7 @@
-rvm gemset use idkfa --create
+# if you're using system, let's use 1.9.2. Otherwise, leave the ruby alone
+[[ `rvm tools identifier` == 'system' ]] && rvm use 1.9.2
+
+# create idkfa gemset if necessary
+(rvm gemset list | grep idkfa &> /dev/null) || rvm gemset create idkfa
+
+rvm gemset use idkfa

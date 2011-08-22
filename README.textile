@@ -1,10 +1,16 @@
 !https://raw.github.com/bendyworks/idkfa/master/doc/stop.png!
 
+
+
+
 h1. STOP!
 
 p. No, seriously. STOP!
 
 p. This README is not yet accurate! That is, do not assume any of this documentation is true until this notice is removed!
+
+
+
 
 h1. idkfa: Share Sensitive Information Securely
 
@@ -24,7 +30,12 @@ This tool does not prevent tampering with your sensitive information. For exampl
 
 This "hole" may be fixed in the future. Please comment on the "appropriate issue":https://github.com/bendyworks/idkfa/issues/1 if you have ideas.
 
+
+
+
 h1. Getting Started
+
+h2. Installation
 
 Install @idkfa@ as a gem:
 
@@ -33,6 +44,9 @@ bc. gem install idkfa
 or declare it in your Gemfile:
 
 bc. gem 'idkfa'
+
+
+h2. Initialization
 
 Then initialize @idkfa@ with:
 
@@ -81,6 +95,9 @@ production:
   # twitter_consumer_key: 'insert consumer key here'
 
 Changing this information is covered in "Managing Your Sensitive Data":#manage-sensitive-information
+
+
+
 
 h1. Managing Access
 
@@ -171,6 +188,9 @@ bc. $ idkfa revoke user@host
 
 This removes the revokee's information from the credentials file and resets the symmetric key for everyone else. Do not be surprised when your source code management tool reports that your credentials file will be almost entirely rewritten.
 
+
+
+
 h1(#manage-sensitive-information). Managing Your Sensitive Information
 
 Since your sensitive information is encrypted, you cannot directly manage that data. @idkfa@ provides the ability to dump your sensitive data to a file (credentials.unencrypted.yml) in the same directory as your credentials file:
@@ -187,16 +207,25 @@ bc. $ idkfa edit
 
 </s>
 
+
+
+
 h1. Usage in Code
 
 * Install as a gem (see "Getting Started")
 * In some initialization portion of your code, you may optionally specify a default namespace: @Idkfa.default_namespace = 'production'@ (in the presence of Rails, this will be done automatically)
 * In your code, use @Idkfa['twitter_consumer_key']@ (Idkfa will autoload your credentials on first use)
 
+
+
+
 h1. Developer Notes
 
 * https://github.com/radar/guides/blob/master/gem-development.md
 * https://github.com/blambeau/quickl (probably not necessary, but we can at least evaluate it)
+
+
+
 
 h1. Acknowledgements
 

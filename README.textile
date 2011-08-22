@@ -60,26 +60,27 @@ Sample @credentials.yml@:
 
 bc. ---
 keys:
-  - id: '<your-login@your-computer>'
-    public_key: '<your idkfa-specific rsa public key>'
-    symmetric_key: '<the aes key, encrypted with rsa public key>'
+- id: '<your-login@your-computer>'
+  public_key: '<your idkfa-specific rsa public key>'
+  symmetric_key: '<the aes key, encrypted with rsa public key>'
+content: '<aes-encrypted, base64-encoded YAML>'
 
 Here's an example of what a @credentials.yml@ might look like with a couple developers and servers:
 
 bc. ---
 keys:
-  - id: 'alice@alice.example.com'
-    public_key: '<idkfa-specific rsa public key for alice>'
-    symmetric_key: '<the aes key, encrypted with rsa public key for alice>'
-  - id: 'bob@bob.example.com'
-    public_key: '<idkfa-specific rsa public key for bob>'
-    symmetric_key: '<the aes key, encrypted with rsa public key for bob>'
-  - id: staging server
-    public_key: '<rsa public key for staging server>'
-    symmetric_key: '<the aes key, encrypted with rsa public key for staging server>'
-  - id: production server
-    public_key: '<rsa public key for production server>'
-    symmetric_key: '<the aes key, encrypted with rsa public key for production server>'
+- id: 'alice@alice.example.com'
+  public_key: '<idkfa-specific rsa public key for alice>'
+  symmetric_key: '<the aes key, encrypted with rsa public key for alice>'
+- id: 'bob@bob.example.com'
+  public_key: '<idkfa-specific rsa public key for bob>'
+  symmetric_key: '<the aes key, encrypted with rsa public key for bob>'
+- id: staging server
+  public_key: '<rsa public key for staging server>'
+  symmetric_key: '<the aes key, encrypted with rsa public key for staging server>'
+- id: production server
+  public_key: '<rsa public key for production server>'
+  symmetric_key: '<the aes key, encrypted with rsa public key for production server>'
 content: '<aes-encrypted, base64-encoded YAML>'
 
 When the value of the @content@ key is decrypted, it is a simple YAML file. The generated file structure is in the following form:

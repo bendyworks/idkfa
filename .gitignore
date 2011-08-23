@@ -1,4 +1,5 @@
 *.gem
 .bundle
+binstubs/*
 Gemfile.lock
 pkg/*

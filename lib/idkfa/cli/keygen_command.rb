@@ -9,10 +9,10 @@ module Idkfa
       end
 
       def run
-        if Idkfa::OpenSSL.keypair_exists? @keypair_name
+        if OpenSSL.keypair_exists? @keypair_name
           abort "A key pair for '#{@keypair_name}' already exists"
         else
-          Idkfa::OpenSSL.create_keypair @keypair_name
+          OpenSSL.create_keypair @keypair_name
         end
       end
 

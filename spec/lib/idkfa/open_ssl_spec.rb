@@ -49,7 +49,7 @@ describe Idkfa::OpenSSL do
   end
 
   describe '#create_keypair' do
-    after { Idkfa::OpenSSL.create_keypair }
+    after { Idkfa::OpenSSL.create_keypair 'default' }
 
     it 'generates the keypair' do
       Idkfa::OpenSSL.should_receive(:generate_keypair)
@@ -66,7 +66,7 @@ describe Idkfa::OpenSSL do
     it "constructs the expected public/private key filenames when no name is passed" do
       File.should_receive(:exists?).with('/tmp/idkfa/.idkfa/default.public.yml').once
       File.should_receive(:exists?).with('/tmp/idkfa/.idkfa/.default.private.yml').once
-      Idkfa::OpenSSL.keypair_exists?
+      Idkfa::OpenSSL.keypair_exists? 'default'
     end
 
     it "constructs the expected public/private key filenames when a custom name is passed" do
@@ -77,12 +77,12 @@ describe Idkfa::OpenSSL do
 
     it "returns true when files exist" do
       File.stub(:exists?).and_return(true)
-      Idkfa::OpenSSL.keypair_exists?.should be_true
+      Idkfa::OpenSSL.keypair_exists?('default').should be_true
     end
 
     it "returns false when neither file exists" do
       File.stub(:exists?).and_return(false)
-      Idkfa::OpenSSL.keypair_exists?.should be_false
+      Idkfa::OpenSSL.keypair_exists?('default').should be_false
     end
   end
 end

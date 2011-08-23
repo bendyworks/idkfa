@@ -4,13 +4,16 @@ require 'fileutils'
 module Idkfa
   class OpenSSL
     class << self
-      def create_keypair keypair_name = 'default'
-        keys = generate_keypair
-        write_keypair keypair_name, keys
+
+      def create_keypair_unless_exists key_name = nil
+        key_name = 'default' if key_name.nil? || key_name == ""
+
+        create_keypair(key_name) unless keypair_exists?(key_name)
       end
 
-      def create_keypair_unless_exists
-        create_keypair unless keypair_exists?
+      def create_keypair keypair_name
+        keys = generate_keypair
+        write_keypair keypair_name, keys
       end
 
       def generate_keypair
@@ -35,14 +38,12 @@ module Idkfa
       end
 
       def create_keypair_directory
-        FileUtils.mkdir_p("#{Idkfa.home_directory}/.idkfa").first
+        FileUtils.mkdir_p(Idkfa.key_directory).first
       end
 
-      def keypair_exists? keypair_name = nil
-        keypair_name = 'default' if keypair_name.nil? || keypair_name == ""
-        directory = "#{Idkfa.home_directory}/.idkfa"
-        public_keyfile = "#{directory}/#{keypair_name}.public.yml"
-        private_keyfile = "#{directory}/.#{keypair_name}.private.yml"
+      def keypair_exists? keypair_name
+        public_keyfile = "#{Idkfa.key_directory}/#{keypair_name}.public.yml"
+        private_keyfile = "#{Idkfa.key_directory}/.#{keypair_name}.private.yml"
         pub_key_exists  = File.exists? public_keyfile
         priv_key_exists = File.exists? private_keyfile
         pub_key_exists || priv_key_exists

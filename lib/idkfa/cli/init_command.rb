@@ -7,11 +7,12 @@ module Idkfa
       def initialize opts
         @parsed = Slop.parse opts do |o|
           o.on :c, :config_file, :optional => true
+          o.on :k, :key_name, :optional => true
         end
       end
 
       def run
-        Idkfa::OpenSSL.create_keypair_unless_exists
+        OpenSSL.create_keypair_unless_exists(@parsed[:key_name])
         create_credentials_file unless credentials_file_exists?
       end
 

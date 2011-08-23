@@ -1,19 +1,5 @@
-require 'fileutils'
-require 'yaml'
-require 'idkfa/open_ssl'
+require 'idkfa/idkfa'
 
 module Idkfa
-
-  class << self
-
-    def project_directory
-      File.expand_path '.'
-    end
-
-    def home_directory
-      File.expand_path '~'
-    end
-
-  end
 
 end

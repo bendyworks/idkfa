@@ -1,4 +1,4 @@
-require 'yaml'
+require 'idkfa'
 require 'idkfa/cli/commands'
 
 module Idkfa

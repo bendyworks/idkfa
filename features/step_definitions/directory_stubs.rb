@@ -1,3 +1,5 @@
+# TODO: Use Aruba's working directory stuffs - @issue-4
+
 Given /^the home directory is stubbed to "([^"]*)"$/ do |path|
   FileUtils.rm_rf "#{path}/.idkfa"
   Idkfa::Idkfa.stub(:home_directory => path)

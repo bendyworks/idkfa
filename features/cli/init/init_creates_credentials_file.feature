@@ -6,13 +6,12 @@ Feature: The init CLI command creates a credentials file
   Background:
     Given directories and rsa generation are stubbed
 
-  Scenario: Init without config directory creates base credentials.yml
+  Scenario: Init without config directory creates ./credentials.yml
     When I run the "init" cli command
-    Then a directory named "/tmp/idkfa/.idkfa" should exist
-      And the following files should exist:
-        | /tmp/idkfa/.idkfa/default.public.yml   |
-        | /tmp/idkfa/.idkfa/.default.private.yml |
-      And the file "/tmp/idkfa/project/credentials.yml" should contain:
+    Then the following files should exist:
+      | /tmp/idkfa/.idkfa/default.public.yml   |
+      | /tmp/idkfa/.idkfa/.default.private.yml |
+    And the file "/tmp/idkfa/project/credentials.yml" should contain:
       """
       --- 
       keys: 

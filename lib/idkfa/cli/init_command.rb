@@ -12,7 +12,7 @@ module Idkfa
       end
 
       def run
-        OpenSSL.create_keypair_unless_exists(@parsed[:key_name])
+        OpenSSL::Asymmetric.create_keypair_unless_exists(@parsed[:key_name])
         create_credentials_file unless credentials_file_exists?
       end
 

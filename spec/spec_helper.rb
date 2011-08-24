@@ -14,6 +14,7 @@ RSpec.configure do |config|
   # config.mock_with :rr
   config.mock_with :rspec
 
+  # TODO: Use Aruba's working directory stuffs - @issue-4
   config.before do
     path = '/tmp/idkfa'
     FileUtils.rm_rf "#{path}/.idkfa"

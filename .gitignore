@@ -1,5 +1,7 @@
 *.gem
 .bundle
+.yardoc
 binstubs/*
 Gemfile.lock
 pkg/*
+rerun.txt

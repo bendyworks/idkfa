@@ -14,8 +14,8 @@ Feature: The init CLI command creates a credentials file
         | /tmp/idkfa/.idkfa/.default.private.yml |
       And the file "/tmp/idkfa/project/credentials.yml" should contain:
       """
-      ---
-      keys:
+      --- 
+      keys: 
       - id: login@computer
         public_key: pub_key
         symmetric_key: sym_key
@@ -27,8 +27,8 @@ Feature: The init CLI command creates a credentials file
     When I run the "init" cli command
     Then the file "/tmp/idkfa/project/config/credentials.yml" should contain:
       """
-      ---
-      keys:
+      --- 
+      keys: 
       - id: login@computer
         public_key: pub_key
         symmetric_key: sym_key
@@ -39,8 +39,8 @@ Feature: The init CLI command creates a credentials file
     When I run the "init" cli command with "-c cred.yml"
     Then the file "/tmp/idkfa/project/cred.yml" should contain:
       """
-      ---
-      keys:
+      --- 
+      keys: 
       - id: login@computer
         public_key: pub_key
         symmetric_key: sym_key

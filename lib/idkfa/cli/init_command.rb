@@ -22,16 +22,14 @@ module Idkfa
 
       def create_credentials_file
         filename = determine_credentials_location
-        if File.exists?(filename)
-          fail 'Cannot init: credentials file already exists'
-        else
-          hash = {
-            'keys' => [{'id' => 'login@computer', 'public_key' => 'pub_key', 'symmetric_key' => 'sym_key'}],
-            'content' => 'abc123'
-          }
-          File.open(filename, 'w') do |f|
-            YAML.dump(hash, f)
-          end
+        fail 'Cannot init: credentials file already exists' if File.exists?(filename)
+
+        hash = {
+          'keys' => [{'id' => 'login@computer', 'public_key' => 'pub_key', 'symmetric_key' => 'sym_key'}],
+          'content' => 'abc123'
+        }
+        File.open(filename, 'w') do |f|
+          YAML.dump(hash, f)
         end
       end
 

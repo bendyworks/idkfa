@@ -1,0 +1,19 @@
+h1. Asymmetric Encryption
+
+`Idkfa` uses an RSA 4096-bit asymmetric keypair to perform asymmetric encryption. This README discusses the conceptual process of the encryption used in `Idkfa` rather than the library's specific implementation.
+
+h2. The First User: Alice
+
+Alice generates her own keypair. She also generates a random symmetric key (and initialization vector, or IV) and encrypt it with her public key. The symmetric key (with IV) is used to symmetrically encrypt the sensitive information - sensitive information that might include API keys or database passwords.
+
+h2. Additional User: Bob
+
+Alice wishes to invite Bob to collaborate. Bob will generate his own keypair. In order to read (and change) the sensitive information, Bob must have access to the symmetric key and IV. Bob securely delivers his public key to Alice, who then uses Bob's public key to encrypt the symmetric key and IV (which Alice decrypts with her own private key).
+
+h2. Additional User: Carol
+
+Carol wishes to collaborate as well. She goes through the same process but can ask either Alice or Bob to "let her in."
+
+h1. Symmetric Encryption
+
+`Idkfa` uses Advanced Encryption Standard, 256-bit Chain Block Cipher Mode (AES-256-CBC) to ultimately encrypt your sensitive information. Each time the sensitive information changes (and thus requires re-encryption), the IV will change as well.

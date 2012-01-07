@@ -5,7 +5,6 @@ module Idkfa
     attr_accessor :asymmetric_key
     attr_accessor :encrypted_symmetric_key
 
-    # Creates a new
     def initialize symmetric_key, key_name = nil
       @key_name ||= self.class.key_name_from_system
       @asymmetric_key = OpenSSL::Asymmetric.new

@@ -6,13 +6,12 @@ group 'doc' do
     watch 'README.textile'
   end
 
-  guard 'yard', :port => '8808' do
+  guard 'yard', :port => '8809' do
     watch(%r{lib/.+\.rb})
   end
 end
 
 group 'test' do
-
   guard 'cucumber' do
     watch(%r{^features/.+\.feature$})
     watch(%r{^lib/(.+)\.rb})                              { 'features' }
@@ -29,5 +28,4 @@ group 'test' do
     watch(%r{^lib/(.+)\.rb})     { |m| "spec/lib/#{m[1]}_spec.rb" }
     watch('spec/spec_helper.rb') { "spec" }
   end
-
 end

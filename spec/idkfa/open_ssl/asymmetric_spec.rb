@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'base64'
 require 'idkfa/open_ssl/asymmetric'
 
 describe Idkfa::OpenSSL::Asymmetric do
@@ -6,27 +7,91 @@ describe Idkfa::OpenSSL::Asymmetric do
   let(:pub_key) { 'foo' }
   let(:priv_key) { 'bar' }
   let(:keys) { {:public_key => pub_key, :private_key => priv_key} }
+  let(:cust_keys) { {:public_key => 'a', :private_key => 'b'} }
 
-  describe '#initialize' do
-    it 'creates a public/private keypair' do
+  shared_examples_for 'Asymmetric from scratch' do
+    before do
       Idkfa::OpenSSL::Asymmetric.stub :generate_keys => keys
+    end
+    it 'creates a public/private keypair' do
       asym = Idkfa::OpenSSL::Asymmetric.new
       asym.public_key.should == pub_key
       asym.private_key.should == priv_key
     end
+    it 'sets name to "default" by default' do
+      asym = Idkfa::OpenSSL::Asymmetric.new
+      asym.name.should == 'default'
+    end
+    it 'allows custom names' do
+      asym = Idkfa::OpenSSL::Asymmetric.new('cust')
+      asym.name.should == 'cust'
+    end
+  end
+
+  describe '#initialize' do
+    context 'when passed zero or one args' do
+      it_should_behave_like 'Asymmetric from scratch'
+    end
+    context 'when passed the key args' do
+      it 'stores uses the passed keys' do
+        asym = Idkfa::OpenSSL::Asymmetric.new(nil, cust_keys)
+        asym.public_key.should == cust_keys[:public_key]
+        asym.private_key.should == cust_keys[:private_key]
+      end
+    end
+  end
+
+  describe '#initialize_from_scratch' do
+    it_should_behave_like 'Asymmetric from scratch'
+  end
+
+  describe '#save', :focus => true do
+    let(:asym) { Idkfa::OpenSSL::Asymmetric.new }
+    let(:public_path) { Idkfa::Idkfa.key_directory.join("#{asym.name}.public.yml") }
+    let(:private_path) { Idkfa::Idkfa.key_directory.join(".#{asym.name}.private.yml") }
+    before do
+      Idkfa::OpenSSL::Asymmetric.stub :generate_keys => keys
+      asym.save
+    end
+
+    it 'saves the asymmetric public key' do
+      YAML.load_file(public_path).should == 'foo'
+    end
+    it 'saves the asymmetric private key' do
+      YAML.load_file(private_path).should == 'bar'
+    end
   end
 
   describe '.load' do
-    it 'loads the public key via name'
-    it 'loads the private key via name'
+    before do
+      Idkfa::OpenSSL::Asymmetric.stub :generate_keys => keys
+      Idkfa::OpenSSL::Asymmetric.new.save
+    end
+    it 'loads the public key via name' do
+      Idkfa::OpenSSL::Asymmetric.load('default').public_key.should == pub_key
+    end
+
+    it 'loads the private key via name' do
+      Idkfa::OpenSSL::Asymmetric.load('default').private_key.should == priv_key
+    end
   end
 
-  describe '#encrypt' do
-    it 'encrypts the parameter and returns the result'
-  end
+  describe 'encryption' do
+    let(:key_dir) { File.join SPEC_DIR, 'fixtures', 'key_dir' }
+    let(:priv_key) { ::OpenSSL::PKey::RSA.new File.read(File.join key_dir, 'priv_key.pem') }
+    let(:pub_key) { ::OpenSSL::PKey::RSA.new priv_key.public_key }
+    let(:keys) { {:private_key => priv_key} }
 
-  describe '#decrypt' do
-    it 'decrypts the parameter and returns the result'
+    describe '#encrypt' do
+      it 'encrypts the parameter with the public key and returns the result' do
+        asym = Idkfa::OpenSSL::Asymmetric.new('default', keys)
+        asym.encrypt('foo').length.should == 512 #encrypts differently every time. actually test encryption in #decrypt
+      end
+    end
+
+    describe '#decrypt' do
+      it 'decrypts the parameter with the private key and returns the result'
+    end
   end
 
   # describe "#write_keypair" do

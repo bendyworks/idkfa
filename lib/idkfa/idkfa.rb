@@ -8,19 +8,19 @@ module Idkfa
 
     class << self
 
-      # @return [String] Usually just the current working directory
+      # @return [Pathname] Usually just the current working directory
       def project_directory
-        @project_directory ||= File.expand_path '.'
+        @project_directory ||= Pathname.new(File.expand_path '.')
       end
 
-      # @return [String] Usually just the user's home directory
+      # @return [Pathname] Usually just the user's home directory
       def home_directory
-        @home_directory ||= File.expand_path '~'
+        @home_directory ||= Pathname.new(File.expand_path '~')
       end
 
-      # @return [String] Usually just '.idkfa' inside the user's home directory
+      # @return [Pathname] Usually just '.idkfa' inside the user's home directory
       def key_directory
-        @key_directory ||= File.join home_directory, '.idkfa'
+        @key_directory ||= Pathname.new(File.join home_directory, '.idkfa')
       end
 
     end

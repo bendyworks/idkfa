@@ -3,10 +3,20 @@ require 'idkfa/authorization'
 
 describe Idkfa::Authorization do
   describe '#initialize' do
-    it 'generates public/private keys' do
-      Idkfa::OpenSSL::Asymmetric.should_receive(:new).and_return(mock('asymmetric key'))
-      Idkfa::Authorization.new
+    let(:asym_key) { mock('asym key', :encrypt => 'encrypted') }
+    let(:authorization) { Idkfa::Authorization.new 'fake symmetric key' }
+    before do
+      Idkfa::OpenSSL::Asymmetric.should_receive(:new).and_return(asym_key)
     end
+
+    it 'generates public/private keys' do
+      authorization.asymmetric_key.should == asym_key
+    end
+
+    it 'encrypts the symmetric key' do
+      authorization.encrypted_symmetric_key.should == 'encrypted'
+    end
+
   end
 
   describe '.key_name_from_system' do
@@ -14,7 +24,7 @@ describe Idkfa::Authorization do
     it 'uses current login and hostname' do
       Etc.stub :getlogin => 'user'
       Socket.stub :gethostname => 'hostname'
-      Idkfa::Authorization.key_name_from_system.should == "#{user}@#{hostname}"
+      Idkfa::Authorization.key_name_from_system.should == "user@hostname"
     end
   end
 

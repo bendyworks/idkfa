@@ -4,6 +4,9 @@ require File.expand_path('../../lib/idkfa', __FILE__)
 # in spec/support/ and its subdirectories.
 Dir[File.expand_path("../spec/support/**/*.rb", __FILE__)].each {|f| require f}
 
+IDKFA_TEST_MODE = true
+SPEC_DIR = File.expand_path('..', __FILE__)
+
 RSpec.configure do |config|
   # == Mock Framework
   #
@@ -13,6 +16,8 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
   config.mock_with :rspec
+
+  # config.filter_run :focus => true
 
   # TODO: Use Aruba's working directory stuffs - @issue-4
   config.before do

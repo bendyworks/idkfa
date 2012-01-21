@@ -2,10 +2,9 @@ require 'spec_helper'
 require 'idkfa/cli/init_command'
 
 describe Idkfa::CLI::InitCommand do
-  include Idkfa::CLI
 
   describe '#run' do
-    subject { InitCommand.new([]) }
+    subject { Idkfa::CLI::InitCommand.new([]) }
     after { subject.run }
 
     context 'when keypair directory exists' do

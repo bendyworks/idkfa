@@ -1,21 +1,21 @@
 # TODO: Use Aruba's working directory stuffs - @issue-4
 
-Given /^the home directory is stubbed to "([^"]*)"$/ do |path|
+step 'the home directory is stubbed to :path' do |path|
   FileUtils.rm_rf "#{path}/.idkfa"
   Idkfa::Idkfa.stub(:home_directory => path)
 end
 
-Given /^the project directory is stubbed to "([^"]*)"$/ do |path|
+step 'the project directory is stubbed to :path' do |path|
   FileUtils.rm_rf path
   FileUtils.mkdir_p path
   Idkfa::Idkfa.stub(:project_directory => path)
 end
 
-Given /^the project directory contains "([^"]*)"$/ do |path|
+step 'the project directory contains :path' do |path|
   FileUtils.mkdir_p "#{Idkfa::Idkfa.project_directory}/#{path}"
 end
 
-Given /^an \.idkfa directory exists at "([^"]*)" with "([^"]*)" keyfiles$/ do |path, keypair_name|
+step 'an .idkfa directory exists at :path with :keypair_name keyfiles' do |path, keypair_name|
   FileUtils.mkdir_p path
   FileUtils.touch "#{path}/#{keypair_name}.public.yml"
   FileUtils.touch "#{path}/.#{keypair_name}.private.yml"

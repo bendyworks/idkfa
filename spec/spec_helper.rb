@@ -1,6 +1,8 @@
 require File.expand_path('../../lib/idkfa', __FILE__)
 require File.expand_path('../../lib/idkfa/cli', __FILE__)
 
+require 'aruba/api'
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[File.expand_path("../spec/support/**/*.rb", __FILE__)].each {|f| require f}

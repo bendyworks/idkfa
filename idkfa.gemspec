@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = %w(brad@bendyworks.com jaymes@bendyworks.com nick@bendyworks.com)
   s.homepage    = "https://github.com/bendyworks/idkfa"
   s.summary     = %q{Simple credentials}
-  s.description = %q{Use this gem to store your site credentials in a secure way}
+  s.description = %q{Store your site credentials in a secure way}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {spec,features}/*`.split("\n")
@@ -19,15 +19,13 @@ Gem::Specification.new do |s|
 
   s.add_dependency('slop')
 
-  s.add_development_dependency('RedCloth')
-  s.add_development_dependency('ZenTest')
   s.add_development_dependency('aruba')
   s.add_development_dependency('guard')
   s.add_development_dependency('guard-rspec')
   s.add_development_dependency('guard-yard')
+  s.add_development_dependency('guard-readme-on-github')
   s.add_development_dependency('rb-fsevent')
   s.add_development_dependency('rspec')
   s.add_development_dependency('turnip')
-  s.add_development_dependency('yard')
 
 end

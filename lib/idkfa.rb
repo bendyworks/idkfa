@@ -1,5 +1,1 @@
-require 'idkfa/idkfa'
-
-module Idkfa
-
-end
+require 'idkfa/base'
